@@ -1,9 +1,7 @@
-const pool = require("../db");
-
-const schema = process.env.PG_SCHEMA;
 
 
-const userVerification = async ( id ) => {
+
+const userVerification = async ( uid ) => {
 
   const query = {
     text: `select id, uid, username, profile_id, state  from ${schema}.users

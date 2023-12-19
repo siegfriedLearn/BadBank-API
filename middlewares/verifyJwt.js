@@ -4,7 +4,8 @@ const {userVerification} = require('../helpers/userVerification')
 
 //Recepción token y validación
 const verifyJwt = async (req, res, next)=>{
-    let token = req.header['x-access-token'] || req.headers['authorization'];
+    let  token  =  req.headers['authorization'];
+    //console.log(req.headers)
     
     if (!token) {
         res.status(401).send( {
@@ -23,25 +24,26 @@ const verifyJwt = async (req, res, next)=>{
                     message: 'El token no es valido'
                 });
             }else{
-                //con decoded.id hago la busqueda de ese usuario en la bd
-                const user = await userVerification(decoded.id)
-
+                //con decoded.uid hago la busqueda de ese usuario en la bd
+                //const uid = await userVerification(decoded.uid)
+                const uid = decoded.uid
+                //console.log(decoded.uid)
                 //Usuario no existe en bd
-                if ( !user ) {
+                if ( !uid ) {
                     return res.status(401).json({
                         message: "El token no es válido - Usuario no se encuentra en BD"
                     })
                 }
 
                 //verificar si el usuario está inactivo
-                if ( !user.state ) {
-                    return  res.status(401).json({
-                        message: 'El token no es válido - Inactive'
-                    });
-                }
+                // if ( !uid.state ) {
+                //     return  res.status(401).json({
+                //         message: 'El token no es válido - Inactive'
+                //     });
+                // }
       
                 //console.log(profile_id)
-                req.user = user; 
+                req.uid = uid; 
 
                 next();
             }

@@ -1,77 +1,56 @@
-const { app } = require("../config/firebase");
-const { getDatabase, ref, set, get, push, update, child } = require("firebase/database");
-
+const { searchByUid, changeBalance, addTransaction } = require("../helpers/dal");
 
 const getBalanceByUid = async (req, res) => {
-  const { uid } = req.params;
+  const { uid } = req;
+  //console.log(uid)
 
   if (uid) {
-    const dbRef = ref(getDatabase());
-
-    get(child(dbRef, `users/${uid}`)).then((snapshot) => {
-      if (snapshot.exists()) {
-        console.log(snapshot.val());
-        const history = snapshot.val();
-
+    searchByUid(uid)
+      .then((history) => {
         res.status(200).json({
           status: "success",
           history
         });
-
-      } else {
-        console.log("No data available");
-      }
-    }).catch((error) => {
-      console.error(error);
-      res.status(400).json({
-        status: "error",
-
+      })
+      .catch((err) => {
+        res.status(400).json({
+          status: err,
+        });
       });
-    }); 
-  }else{
+  } else {
     res.status(400).json({
       status: "Error no uid",
     });
   }
 };
-
-
 
 const modifyBalance = async (req, res) => {
-  const { uid, balance } = req.body;
+  
+  const { balance, tipo, valor } = req.body;
+  const { uid } = req;
 
   if (uid) {
-      const db = getDatabase();
-    
-      // A post entry.
-      const postData = {
-        uid,
-        balance
-      };
-    
-      // Get a key for a new Post.
-      //const newPostKey = push(child(ref(db), 'users')).key;
-    
-      // Write the new post's data simultaneously in the posts list and the user's post list.
-      const updates = {};
-      //updates['/posts/' + newPostKey] = postData;
-      updates['/users/' + uid ] = postData;
-      update(ref(db), updates);
-      //return 
+    changeBalance(uid, balance).then(async resp =>{
+      const transaction = await addTransaction(uid, tipo, valor);
+      console.log(transaction);
       res.status(200).json({
-        status: "success",
-        
+        status: resp,
+
       });
-    
-  }else{
+    }).catch(err=>{
+      res.status(400).json({
+        status: err,
+      });
+    })
+
+  } else {
     res.status(400).json({
       status: "Error no uid",
     });
   }
 };
-
 
 module.exports = {
   getBalanceByUid,
-  modifyBalance
+  modifyBalance,
 };
