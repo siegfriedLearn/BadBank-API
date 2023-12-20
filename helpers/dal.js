@@ -48,13 +48,9 @@ const addTransaction = (uid, tipo, value) => {
 
   return new Promise((resolve, reject) => {
     const date = new Date();
-    // push(child(db, "/users/" + uid + "/transacciones"),  {tipo, value, fecha: String(date)} )
-    //     .then(resp => resolve('Ok.'))
-    //     .catch(err=>reject('error'))
-    const referencia = ref(db, "/users/" + uid);
-    //const transacciones = referencia(child("transacciones"));
-    push(referencia, {tipo, value, fecha: String(date)})
-    //transacciones.push({tipo, value, fecha: String(date)}, {merge: true})
+    push(ref(db, "/users/" + uid + "/transacciones"),  {tipo, value, fecha: String(date)} )
+        .then(resp => resolve('Ok.'))
+        .catch(err=>reject('error'))
 
   });
 };
