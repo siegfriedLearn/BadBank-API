@@ -6,10 +6,27 @@ const getBalanceByUid = async (req, res) => {
 
   if (uid) {
     searchByUid(uid)
-      .then((history) => {
+      .then(async (history) => {
+          let arrayTransacciones = [];
+          //console.log(history.transacciones)
+          if (history.transacciones) {
+            const nombresTransacciones = Object.keys(history.transacciones);
+            //console.log(nombresTransacciones)
+            await nombresTransacciones.forEach(element => {
+              const infoTransaccion = {
+                fecha: history.transacciones[element].fecha,
+                tipo: history.transacciones[element].tipo,
+                value: history.transacciones[element].value
+              }
+              arrayTransacciones.push(infoTransaccion);
+            });
+          }
+          
+          //console.log(arrayTransacciones)
         res.status(200).json({
           status: "success",
-          history
+          balance: history.balance,
+          transacciones: arrayTransacciones
         });
       })
       .catch((err) => {
