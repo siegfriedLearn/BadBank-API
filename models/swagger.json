@@ -42,6 +42,13 @@
                 "security":[
                     {"apiKeyAuth": [] }
                 ],
+                "parameters": [
+                    {
+                        "name": "Token",
+                        "in": "headers",
+                        "description": "Token generated at login"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -110,7 +117,7 @@
                     "type": "integer"
                 },
                 "transacciones": {
-                    "type": []
+                    "type": "object"
                 }
             }
         },
