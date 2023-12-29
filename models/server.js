@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+
 
 class Server {
 
@@ -31,6 +34,9 @@ class Server {
 
         //URL encoder
         this.app.use(express.urlencoded( { extended:false } ) )
+
+        //Swagger
+        this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
     }
 
     routes() {

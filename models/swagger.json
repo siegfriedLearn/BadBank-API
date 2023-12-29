@@ -1,0 +1,130 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0", 
+        "title": "Bad Bank project",
+        "description": "API",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "securityDefinitions": {
+        "apiKeyAuth": {
+          "type": "apiKey",
+          "in": "header",
+          "name": "Authorization"
+        }
+      },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Bad Bank",
+            "description": "API for users in the system"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+
+    "paths": {
+        "/api/history/balance": {
+            "get": {
+                "tags": ["Balance"],
+                "summary": "Get balance",
+                "security":[
+                    {"apiKeyAuth": [] }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseGetBalance"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Modify Balance"],
+                "description": "Change balance in system",
+                "security":[
+                    {"apiKeyAuth": [] }
+                ],
+                "parameters": [
+                    {
+                        "name": "balance",
+                        "in": "body",
+                        "description": "Balance that we want to modify",
+                        "schema": {
+                            "$ref": "#/definitions/Balance"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New balace is updated",
+                        "schema": {
+                            "$ref": "#/definitions/BalanceResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Balance": {
+            "required": ["uid", "balance", "tipo", "valor"],
+            "properties": {
+                "uid": {
+                    "type": "string",
+                    "uniqueItems": true
+                },
+                "balance": {
+                    "type": "integer"
+                },
+                "tipo": {
+                    "type": "string"
+                },
+                "valor": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ResponseGetBalance": {
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "uniqueItems": true
+                },
+                "balance": {
+                    "type": "integer"
+                },
+                "transacciones": {
+                    "type": []
+                }
+            }
+        },
+        "BalanceResponse": {
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "uniqueItems": true
+                }
+            }
+        }
+    }
+}
+
+
+
+
