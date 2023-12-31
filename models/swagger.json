@@ -68,7 +68,7 @@
                     {
                         "name": "balance",
                         "in": "body",
-                        "description": "Balance that we want to modify",
+                        "description": "Balance that you want to modify using a token",
                         "schema": {
                             "$ref": "#/definitions/Balance"
                         }
@@ -90,12 +90,8 @@
     },
     "definitions": {
         "Balance": {
-            "required": ["uid", "balance", "tipo", "valor"],
+            "required": ["balance", "tipo", "valor"],
             "properties": {
-                "uid": {
-                    "type": "string",
-                    "uniqueItems": true
-                },
                 "balance": {
                     "type": "integer"
                 },
