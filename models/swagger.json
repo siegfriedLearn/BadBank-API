@@ -16,7 +16,7 @@
           "name": "Authorization"
         }
       },
-    "host": "localhost:3000",
+    "host": "https://api-badbank.azurewebsites.net",
     "basePath": "/",
     "tags": [
         {
