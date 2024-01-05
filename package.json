@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon ./app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "nodemon": "nodemon ./app.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
     "firebase": "^10.7.1",
+    "firebase-admin": "^12.0.0",
     "jsonwebtoken": "^9.0.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
