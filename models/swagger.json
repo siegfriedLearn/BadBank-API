@@ -1,131 +1,179 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "version": "1.0.0", 
-        "title": "Bad Bank project",
-        "description": "API",
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
-        }
+  "swagger": "2.0",
+  "info": {
+      "version": "1.0.0", 
+      "title": "Bad Bank project",
+      "description": "API",
+      "license": {
+          "name": "MIT",
+          "url": "https://opensource.org/licenses/MIT"
+      }
+  },
+  "securityDefinitions": {
+      "apiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization"
+      }
     },
-    "securityDefinitions": {
-        "apiKeyAuth": {
-          "type": "apiKey",
-          "in": "header",
-          "name": "Authorization"
+  "host": "api-badbank.azurewebsites.net",
+  "basePath": "/",
+  "tags": [
+      {
+          "name": "Bad Bank",
+          "description": "API for users in the system"
+      }
+  ],
+  "schemes": [
+      "https"
+  ],
+  "consumes": [
+      "application/json"
+  ],
+  "produces": [
+      "application/json"
+  ],
+  "paths": {
+      "/api/history/balance": {
+          "get": {
+              "tags": ["Balance"],
+              "summary": "Get balance",
+              "security":[
+                  {"apiKeyAuth": [] }
+              ],
+              "parameters": [
+                  {
+                      "name": "Token",
+                      "in": "headers",
+                      "description": "Token generated at login"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "OK",
+                      "schema": {
+                          "$ref": "#/definitions/ResponseGetBalance"
+                      }
+                  }
+              }
+          },
+          "post": {
+              "tags": ["Modify Balance"],
+              "description": "Change balance in system",
+              "security":[
+                  {"apiKeyAuth": [] }
+              ],
+              "parameters": [
+                  {
+                      "name": "balance",
+                      "in": "body",
+                      "description": "Balance that you want to modify using a token",
+                      "schema": {
+                          "$ref": "#/definitions/Balance"
+                      }
+                  }
+              ],
+              "produces": [
+                  "application/json"
+              ],
+              "responses": {
+                  "200": {
+                      "description": "New balace is updated",
+                      "schema": {
+                          "$ref": "#/definitions/BalanceResponse"
+                      }
+                  }
+              }
+          }
+      },
+      "/api/history/transfer": {
+        "post": {
+          "tags": ["Transfer"],
+          "description": "Transfer to another account",
+          "security": [
+            {
+              "apiKeyAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "email, valor",
+              "in": "body",
+              "description": "Account destination, value transfer",
+              "schema": {
+                "$ref": "#/definitions/transfer"
+              }
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "Trasnfer ok",
+              "schema": {
+                "$ref": "#/definitions/transferResponse"
+              }
+            }
+          }
+        }
+      }
+  },
+  "definitions": {
+      "Balance": {
+          "required": ["balance", "tipo", "valor"],
+          "properties": {
+              "balance": {
+                  "type": "integer"
+              },
+              "tipo": {
+                  "type": "string"
+              },
+              "valor": {
+                  "type": "integer"
+              }
+          }
+      },
+      "ResponseGetBalance": {
+          "properties": {
+              "status": {
+                  "type": "string",
+                  "uniqueItems": true
+              },
+              "balance": {
+                  "type": "integer"
+              },
+              "transacciones": {
+                  "type": "object"
+              }
+          }
+      },
+      "BalanceResponse": {
+          "properties": {
+              "status": {
+                  "type": "string",
+                  "uniqueItems": true
+              }
+          }
+      },
+      "transfer": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "valor": {
+            "type": "integer",
+            "uniqueItems": true
+          }
         }
       },
-    "host": "api-badbank.azurewebsites.net",
-    "basePath": "/",
-    "tags": [
-        {
-            "name": "Bad Bank",
-            "description": "API for users in the system"
+      "transferResponse": {
+        "properties": {
+          "status": {
+            "type": "string"
+          }
         }
-    ],
-    "schemes": [
-        "https"
-    ],
-    "consumes": [
-        "application/json"
-    ],
-    "produces": [
-        "application/json"
-    ],
-
-    "paths": {
-        "/api/history/balance": {
-            "get": {
-                "tags": ["Balance"],
-                "summary": "Get balance",
-                "security":[
-                    {"apiKeyAuth": [] }
-                ],
-                "parameters": [
-                    {
-                        "name": "Token",
-                        "in": "headers",
-                        "description": "Token generated at login"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/ResponseGetBalance"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": ["Modify Balance"],
-                "description": "Change balance in system",
-                "security":[
-                    {"apiKeyAuth": [] }
-                ],
-                "parameters": [
-                    {
-                        "name": "balance",
-                        "in": "body",
-                        "description": "Balance that you want to modify using a token",
-                        "schema": {
-                            "$ref": "#/definitions/Balance"
-                        }
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "New balace is updated",
-                        "schema": {
-                            "$ref": "#/definitions/BalanceResponse"
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "definitions": {
-        "Balance": {
-            "required": ["balance", "tipo", "valor"],
-            "properties": {
-                "balance": {
-                    "type": "integer"
-                },
-                "tipo": {
-                    "type": "string"
-                },
-                "valor": {
-                    "type": "integer"
-                }
-            }
-        },
-        "ResponseGetBalance": {
-            "properties": {
-                "status": {
-                    "type": "string",
-                    "uniqueItems": true
-                },
-                "balance": {
-                    "type": "integer"
-                },
-                "transacciones": {
-                    "type": "object"
-                }
-            }
-        },
-        "BalanceResponse": {
-            "properties": {
-                "status": {
-                    "type": "string",
-                    "uniqueItems": true
-                }
-            }
-        }
-    }
+      }
+  }
 }
 
 

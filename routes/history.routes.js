@@ -13,7 +13,7 @@ const router = Router();
 //Obtener información del usuario
 router.get('/balance', verifyJwt, getBalanceByUid );
 router.post('/balance', verifyJwt, modifyBalance );
-router.post('/transfer', transfer );
+router.post('/transfer', verifyJwt, transfer );
 
 
 module.exports = router;
